@@ -1,0 +1,125 @@
+{% extends 'consumer/base.html' %}
+{% block title %}Product Comparison{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Product Comparison Table</h2>
+
+    <form id="filterForm" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>
+                        {{ cat|title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select name="sort" class="form-select">
+                <option value="">Sort by Price</option>
+                <option value="price_low_high" {% if selected_sort == 'price_low_high' %}selected{% endif %}>
+                    Low to High
+                </option>
+                <option value="price_high_low" {% if selected_sort == 'price_high_low' %}selected{% endif %}>
+                    High to Low
+                </option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+        </div>
+    </form>
+
+    <div id="comparisonTable">
+        {% include 'consumer/comparison_table_partial.html' %}
+    </div>
+</div>
+
+<script>
+    const updateComparisonTable = async () => {
+        try {
+            const form = document.getElementById("filterForm");
+            const formData = new FormData(form);
+            const params = new URLSearchParams(formData);
+            
+            // Force fresh data with cache-busting
+            params.append('_', Date.now());
+            
+            const response = await fetch(`${window.location.pathname}?${params}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Cache-Control': 'no-cache'
+                },
+                cache: 'no-store'
+            });
+            
+            if (!response.ok) throw new Error('Network error');
+            const data = await response.json();
+            
+            document.getElementById("comparisonTable").innerHTML = data.table_html;
+        } catch (error) {
+            console.error('Update failed:', error);
+        }
+    };
+    
+    document.getElementById("filterForm").addEventListener("change", updateComparisonTable);
+    setInterval(updateComparisonTable, 10000);
+</script>
+{% endblock content %}
+{% comment %} {% extends 'consumer/base.html' %}
+{% block title %}Product Comparison{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Product Comparison Table</h2>
+
+    <form id="filterForm" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <select name="category" class="form-select">
+                <option value="">All Categories</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>
+                        {{ cat|title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4">
+            <select name="sort" class="form-select">
+                <option value="">Sort by Price</option>
+                <option value="price_low_high" {% if selected_sort == 'price_low_high' %}selected{% endif %}>Low to High</option>
+                <option value="price_high_low" {% if selected_sort == 'price_high_low' %}selected{% endif %}>High to Low</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+        </div>
+    </form>
+
+    <div id="comparisonTable">
+        {% include 'consumer/comparison_table_partial.html' %}
+    </div>
+</div>
+
+<script>
+document.getElementById("filterForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData).toString();
+
+    fetch(window.location.pathname + '?' + params, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("comparisonTable").innerHTML = data.table_html;
+    });
+});
+</script>
+{% endblock content %} {% endcomment %}

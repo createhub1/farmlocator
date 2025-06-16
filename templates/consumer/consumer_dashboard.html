@@ -1,0 +1,703 @@
+{% extends "consumer/base.html" %}
+{% block title %}Farm Categories{% endblock title %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Fresh Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --farm-green: #4a7c59;
+            --farm-beige: #f4e9d8;
+            --farm-brown: #6b4f3d;
+        }
+
+        body {
+            background: url('https://www.transparenttextures.com/patterns/light-paper-fibers.png'), var(--farm-beige);
+        }
+
+        .categories-container {
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 20px;
+        }
+
+        .category-header h2 {
+            color: var(--farm-brown);
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scroll-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 20px 0;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            gap: 25px;
+        }
+
+        .category-card {
+            flex: 0 0 300px;
+            border: 2px solid var(--farm-green);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            background: white;
+            position: relative;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #f8f9fa 0%, #e9f5eb 100%);
+            border-bottom: 3px solid var(--farm-green);
+        }
+
+        .category-icon {
+            font-size: 4rem;
+            color: var(--farm-green);
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+
+        .card-body {
+            padding: 15px;
+            background: linear-gradient(to bottom, #ffffff, #f8f8f8);
+        }
+
+        .card-title {
+            color: var(--farm-green);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            color: var(--farm-brown);
+            font-size: 0.9em;
+            min-height: 50px;
+        }
+
+        .btn-primary {
+            background-color: var(--farm-green);
+            border: none;
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--farm-brown);
+        }
+
+        .organic-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ffd700;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .scroll-button {
+            background-color: var(--farm-green);
+            color: white;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .scroll-button:hover {
+            background-color: var(--farm-brown);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .category-card {
+                flex: 0 0 250px;
+            }
+            
+            .card-image {
+                height: 150px;
+            }
+            
+            .category-icon {
+                font-size: 3rem;
+            }
+        }
+        .seasonal-spotlight {
+            background: linear-gradient(rgba(74, 124, 89, 0.9), rgba(74, 124, 89, 0.8)),
+                        url('https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            border-radius: 20px;
+            margin: 40px 0;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .seasonal-content {
+            max-width: 600px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .seasonal-badge {
+            background: var(--farm-yellow);
+            color: var(--farm-brown);
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        /* Farmer's Story Section */
+        .farmer-story {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            background: var(--farm-beige);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .farmer-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--farm-green);
+        }
+
+        /* Sustainability Meter */
+        .sustainability-meter {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 40px 0;
+        }
+
+        .eco-icon {
+            font-size: 2.5rem;
+            color: var(--farm-green);
+            margin-bottom: 15px;
+        }
+
+        /* Recipe Ideas Carousel */
+        .recipe-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Animated Elements */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="categories-container">
+        <div class="category-header">
+            <h2>Farm Fresh Categories</h2>
+            <div class="scroll-buttons">
+                <button class="scroll-button left btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="scroll-button right btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+
+        <div class="scroll-wrapper" id="scrollContainer">
+            <!-- Vegetables -->
+            <div class="category-card">
+                <div class="organic-badge">ORGANIC</div>
+                <div class="card-image">
+                    <i class="fas fa-carrot category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Fresh Vegetables</h5>
+                    <p class="card-text">Locally grown organic vegetables harvested daily</p>
+                    <a href="{% url 'category-products' category='vegetable' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Fruits -->
+            <div class="category-card">
+                <div class="organic-badge">SEASONAL</div>
+                <div class="card-image">
+                    <i class="fas fa-apple-alt category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Seasonal Fruits</h5>
+                    <p class="card-text">Sweet and juicy fruits from our orchards</p>
+                    <a href="{% url 'category-products' category='fruits' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Meat -->
+            <div class="category-card">
+                <div class="organic-badge">GRASS-FED</div>
+                <div class="card-image">
+                    <i class="fas fa-drumstick-bite category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Premium Meats</h5>
+                    <p class="card-text">Ethically raised and humanely processed</p>
+                    <a href="{% url 'category-products' category='meat' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Grains -->
+            <div class="category-card">
+                <div class="organic-badge">WHOLE GRAIN</div>
+                <div class="card-image">
+                    <i class="fas fa-seedling category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Ancient Grains</h5>
+                    <p class="card-text">Nutrient-rich heritage grains</p>
+                    <a href="{% url 'category-products' category='grains' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Dairy -->
+            <div class="category-card">
+                <div class="organic-badge">PASTEURIZED</div>
+                <div class="card-image">
+                    <i class="fas fa-cheese category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Dairy Products</h5>
+                    <p class="card-text">Fresh milk, cheese, and butter</p>
+                    <a href="{% url 'category-products' category='dairy' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Eggs -->
+            <div class="category-card">
+                <div class="organic-badge">FREE RANGE</div>
+                <div class="card-image">
+                    <i class="fas fa-egg category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Farm Eggs</h5>
+                    <p class="card-text">Daily collected free-range eggs</p>
+                    <a href="{% url 'category-products' category='eggs' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+
+            <!-- Honey -->
+            <div class="category-card">
+                <div class="organic-badge">RAW</div>
+                <div class="card-image">
+                    <i class="fas fa-jar category-icon"></i>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Natural Honey</h5>
+                    <p class="card-text">Pure unprocessed honey from local bees</p>
+                    <a href="{% url 'category-products' category='honey' %}" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Seasonal Spotlight -->
+    <div class="container">
+        <div class="seasonal-spotlight">
+            <div class="seasonal-content">
+                <span class="seasonal-badge"><i class="fas fa-seedling me-2"></i>Seasonal Pick</span>
+                <h2>Summer Berries Festival</h2>
+                <p class="lead">Discover our sun-ripened organic strawberries, blueberries, and raspberries picked at peak freshness</p>
+                <button class="btn btn-light btn-lg">
+                    Explore Summer Collection <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meet Our Farmers -->
+    <div class="container">
+        <div class="farmer-story">
+            <img src="https://images.unsplash.com/photo-1582564286939-400a311013a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                 alt="Farmer John" 
+                 class="farmer-avatar">
+            <div>
+                <h3>Meet Farmer John</h3>
+                <p class="text-muted">3rd Generation Organic Farmer</p>
+                <p>"We believe in sustainable farming that respects both the land and our community. Every vegetable is grown with care and commitment to quality."</p>
+                <button class="btn btn-outline-success">
+                    Read Full Story <i class="fas fa-book-open ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sustainability Section -->
+    <div class="container">
+        <div class="sustainability-meter">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <i class="fas fa-leaf eco-icon floating-icon"></i>
+                    <h4>100% Organic</h4>
+                    <p>Certified chemical-free farming</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-tint eco-icon floating-icon"></i>
+                    <h4>Water Positive</h4>
+                    <p>150% rainwater harvesting</p>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-recycle eco-icon floating-icon"></i>
+                    <h4>Zero Waste</h4>
+                    <p>100% compostable packaging</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recipe Ideas -->
+    <div class="container">
+        <h3 class="text-center mb-4">Fresh Recipe Ideas</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="recipe-card">
+                    <div class="recipe-image" 
+                         style="background-image: url('https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')">
+                    </div>
+                    <div class="p-3">
+                        <h5>Farmers Market Salad</h5>
+                        <small class="text-muted">45 mins · Serves 4</small>
+                        <a href="#" class="btn btn-link text-success p-0">View Recipe →</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more recipe cards -->
+        </div>
+    </div>
+
+    <!-- Newsletter Section -->
+    <div class="container my-5">
+        <div class="newsletter-box text-center p-5 rounded-3" 
+             style="background: var(--farm-beige)">
+            <i class="fas fa-envelope-open-text fa-3x text-success mb-4"></i>
+            <h3>Join Our Farm Fresh Family</h3>
+            <p class="text-muted">Get weekly updates, recipes, and exclusive offers</p>
+            <div class="input-group mb-3 mx-auto" style="max-width: 500px;">
+                <input type="email" class="form-control" placeholder="Enter your email">
+                <button class="btn btn-success" type="button">
+                    Subscribe <i class="fas fa-paper-plane ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollContainer = document.getElementById('scrollContainer');
+            const scrollAmount = 320;
+    
+            function scrollCategories(direction) {
+                if (scrollContainer) {
+                    scrollContainer.scrollBy({
+                        left: direction * scrollAmount,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+    
+            document.querySelector('.scroll-button.left').addEventListener('click', () => scrollCategories(-1));
+            document.querySelector('.scroll-button.right').addEventListener('click', () => scrollCategories(1));
+    
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') scrollCategories(-1);
+                if (e.key === 'ArrowRight') scrollCategories(1);
+            });
+    
+            let touchStartX = 0;
+            let touchEndX = 0;
+    
+            scrollContainer.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+    
+            scrollContainer.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 50) scrollCategories(1);
+                if (touchStartX - touchEndX < -50) scrollCategories(-1);
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}
+{% comment %} {% extends "consumer/base.html" %}
+{% block title %}Farm Categories{% endblock title %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farm Categories</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .categories-container {
+            padding: 20px;
+            position: relative;
+        }
+
+        .category-card {
+            flex: 0 0 32%;
+            margin: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .scroll-wrapper {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 10px 0;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+            gap: 10px;
+        }
+
+        .scroll-wrapper::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+
+        .scroll-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .scroll-button.left {
+            left: 10px;
+        }
+
+        .scroll-button.right {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="categories-container">
+        <div class="category-header">
+            <h2>Farm Categories</h2>
+            <div class="scroll-buttons">
+                <button class="scroll-button left" onclick="scroll(-1)">‹</button>
+                <button class="scroll-button right" onclick="scroll(1)">›</button>
+            </div>
+        </div>
+
+        <div class="scroll-wrapper" id="scrollContainer">
+            <!-- Category Cards -->
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?honey" class="card-image" alt="Honey">
+                <div class="card-body">
+                    <h5 class="card-title">Honey</h5>
+                    <p class="card-text">Pure natural honey from local bees</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?eggs" class="card-image" alt="Eggs">
+                <div class="card-body">
+                    <h5 class="card-title">Eggs</h5>
+                    <p class="card-text">Fresh farm eggs daily collection</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?eggs" class="card-image" alt="Eggs">
+                <div class="card-body">
+                    <h5 class="card-title">Eggs</h5>
+                    <p class="card-text">Fresh farm eggs daily collection</p>
+                    <a href="{% url 'category-products' category='dairy' %}" class="btn btn-primary">View Products</a>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?meat" class="card-image" alt="Meat">
+                <div class="card-body">
+                    <h5 class="card-title">Meat</h5>
+                    <p class="card-text">Organic and ethically raised</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?fruits" class="card-image" alt="Fruits">
+                <div class="card-body">
+                    <h5 class="card-title">Fruits</h5>
+                    <p class="card-text">Seasonal fresh fruits</p>
+                    <a href="{% url 'category-products' category='fruits' %}" class="btn btn-primary">View Products</a>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?vegetables" class="card-image" alt="Vegetables">
+                <div class="card-body">
+                    <h5 class="card-title">Vegetables</h5>
+                    <p class="card-text">Organic farm vegetables</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+
+            <!-- Additional Categories -->
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?milk" class="card-image" alt="Milk">
+                <div class="card-body">
+                    <h5 class="card-title">Milk</h5>
+                    <p class="card-text">Fresh milk directly from farms</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?cheese" class="card-image" alt="Cheese">
+                <div class="card-body">
+                    <h5 class="card-title">Cheese</h5>
+                    <p class="card-text">Artisan cheese from local producers</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+
+            <div class="category-card">
+                <img src="https://source.unsplash.com/random/300x200?flowers" class="card-image" alt="Flowers">
+                <div class="card-body">
+                    <h5 class="card-title">Flowers</h5>
+                    <p class="card-text">Beautiful farm-grown flowers</p>
+                    <button class="btn btn-primary">View Products</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollContainer = document.getElementById('scrollContainer');
+            const scrollAmount = 320;
+    
+            function scrollCategories(direction) {
+                if (scrollContainer) {
+                    scrollContainer.scrollBy({
+                        left: direction * scrollAmount,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+    
+            // Attach event listeners to buttons
+            document.querySelector('.scroll-button.left').addEventListener('click', () => scrollCategories(-1));
+            document.querySelector('.scroll-button.right').addEventListener('click', () => scrollCategories(1));
+    
+            // Optional: keyboard
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') scrollCategories(-1);
+                if (e.key === 'ArrowRight') scrollCategories(1);
+            });
+    
+            // Optional: swipe
+            let touchStartX = 0;
+            let touchEndX = 0;
+    
+            scrollContainer.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+    
+            scrollContainer.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                if (touchStartX - touchEndX > 50) scrollCategories(1);
+                if (touchStartX - touchEndX < -50) scrollCategories(-1);
+            });
+        });
+    </script>
+    
+</body>
+</html>
+{% endblock content %} {% endcomment %}

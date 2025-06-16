@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenRoots Farm | Our Story</title>
+    <style>
+        :root {
+            --soil-brown: #8d6e63;
+            --leaf-green: #7cb342;
+            --sun-yellow: #ffd54f;
+            --sky-blue: #4fc3f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%232196F3" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>'), auto;
+        }
+
+        body {
+            background: #f5f5dc;
+            font-family: 'Caveat', cursive;
+            overflow-x: hidden;
+        }
+
+        /* Animated Nature Background */
+        .nature-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, var(--sky-blue) 0%, #fff 100%);
+        }
+
+        .floating-leaves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%237cb342" d="M50 5c-12 0-23 8-28 20-5 12-2 26 8 35 10 9 25 10 36 2 11-8 15-23 9-35-6-12-19-20-31-20z"/></svg>');
+            animation: float 15s infinite linear;
+            opacity: 0.3;
+        }
+
+        /* Hand-drawn Style Sections */
+        .farm-section {
+            padding: 4rem;
+            margin: 4rem auto;
+            max-width: 1200px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            border: 3px solid var(--soil-brown);
+        }
+
+        .farm-section::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border: 2px dashed var(--leaf-green);
+            border-radius: 35px;
+            z-index: -1;
+        }
+
+        /* Growing Title Animation */
+        .growing-title {
+            font-size: 4rem;
+            text-align: center;
+            color: var(--soil-brown);
+            animation: grow 2s ease-out;
+            position: relative;
+            display: inline-block;
+        }
+
+        .growing-title::after {
+            content: '🌱';
+            position: absolute;
+            right: -40px;
+            animation: bounce 2s infinite;
+        }
+
+        /* Interactive Farm Map */
+        .farm-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .farm-area {
+            padding: 2rem;
+            background: #fff;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            border: 2px solid var(--sun-yellow);
+            position: relative;
+        }
+
+        .farm-area:hover {
+            transform: rotate(3deg) scale(1.05);
+            z-index: 2;
+        }
+
+        .farm-area::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background: var(--leaf-green);
+            border-radius: 50%;
+        }
+
+        /* Animated Timeline */
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--soil-brown);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            width: 45%;
+            padding: 1.5rem;
+            background: white;
+            margin: 2rem 0;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .timeline-item:nth-child(odd) {
+            margin-left: auto;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+        }
+
+        /* Custom Animations */
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        @keyframes grow {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .farm-section {
+                margin: 2rem;
+                padding: 2rem;
+            }
+
+            .growing-title {
+                font-size: 2.5rem;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 90%;
+                margin-left: 10% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="nature-bg">
+        <div class="floating-leaves"></div>
+    </div>
+
+    <main>
+        <section class="farm-section" style="margin-top: 100px;">
+            <h1 class="growing-title">Our Roots Run Deep</h1>
+            
+            <div class="farm-map">
+                <div class="farm-area">
+                    <h3>🌻 Sunflower Valley</h3>
+                    <p>Where golden petals meet the sky</p>
+                </div>
+                <div class="farm-area">
+                    <h3>🐝 Honeycomb Hills</h3>
+                    <p>Home to our buzzing partners</p>
+                </div>
+                <div class="farm-area">
+                    <h3>🥕 Root Revolution</h3>
+                    <p>Underground flavor factory</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="farm-section">
+            <h2>Our Growth Story</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>1995 - First Seed</h3>
+                    <p>Planted our heritage oak tree</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>2008 - Solar Power</h3>
+                    <p>Switched to 100% renewable energy</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>2020 - Community Roots</h3>
+                    <p>Started our farm-to-table program</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="farm-section">
+            <h2>Meet the Growers</h2>
+            <div class="team-garden">
+                <!-- Add team members with hover effects -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Timeline Scroll Animation
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        timelineItems.forEach(item => timelineObserver.observe(item));
+
+        // Parallax Leaves
+        document.addEventListener('mousemove', (e) => {
+            const leaves = document.querySelector('.floating-leaves');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            leaves.style.transform = `translate(${x * 30}px, ${y * 30}px)`;
+        });
+
+        // Farm Area Hover Sound (optional)
+        document.querySelectorAll('.farm-area').forEach(area => {
+            area.addEventListener('mouseenter', () => {
+                new Audio('birds-chirping.mp3').play().catch(() => {});
+            });
+        });
+    </script>
+</body>
+</html>
